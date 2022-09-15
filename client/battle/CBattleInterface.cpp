@@ -155,6 +155,7 @@ CBattleInterface::CBattleInterface(const CCreatureSet *army1, const CCreatureSet
 
 		queue->moveTo(Point(pos.x, pos.y - queue->pos.h));
 	}
+	queue->moveBy(Point(pos.w / 4, 0));
 	queue->update();
 
 	//preparing siege info
@@ -230,23 +231,41 @@ CBattleInterface::CBattleInterface(const CCreatureSet *army1, const CCreatureSet
 	CSDL_Ext::alphaTransform(amountEffNeutral);
 	transformPalette(amountEffNeutral, 1.00, 1.00, 0.18);
 
+	// Move left buttons to the right, and move console to the left
+	int Xoffset = 437;
+	// int yPos = 521; // debug
+	int yPos = 561; // real
+	int consoleOffset = 20;
+	int consoleButtonOffset = 189;
+
 	//preparing buttons and console
-	bOptions = std::make_shared<CButton>(Point(  3, 561), "icm003.def", CGI->generaltexth->zelp[381], std::bind(&CBattleInterface::bOptionsf,this), SDLK_o);
-	bSurrender = std::make_shared<CButton>(Point( 54, 561), "icm001.def", CGI->generaltexth->zelp[379], std::bind(&CBattleInterface::bSurrenderf,this), SDLK_s);
-	bFlee = std::make_shared<CButton>(Point(105, 561), "icm002.def", CGI->generaltexth->zelp[380], std::bind(&CBattleInterface::bFleef,this), SDLK_r);
-	bAutofight = std::make_shared<CButton>(Point(157, 561), "icm004.def", CGI->generaltexth->zelp[382], std::bind(&CBattleInterface::bAutofightf,this), SDLK_a);
-	bSpell = std::make_shared<CButton>(Point(645, 561), "icm005.def", CGI->generaltexth->zelp[385], std::bind(&CBattleInterface::bSpellf,this), SDLK_c);
-	bWait = std::make_shared<CButton>(Point(696, 561), "icm006.def", CGI->generaltexth->zelp[386], std::bind(&CBattleInterface::bWaitf,this), SDLK_w);
-	bDefence = std::make_shared<CButton>(Point(747, 561), "icm007.def", CGI->generaltexth->zelp[387], std::bind(&CBattleInterface::bDefencef,this), SDLK_d);
+	bOptions = std::make_shared<CButton>(Point(  Xoffset + 4, yPos), "icm003.def", CGI->generaltexth->zelp[381], std::bind(&CBattleInterface::bOptionsf,this), SDLK_o);
+	bSurrender = std::make_shared<CButton>(Point( Xoffset + 55, yPos), "icm001.def", CGI->generaltexth->zelp[379], std::bind(&CBattleInterface::bSurrenderf,this), SDLK_s);
+	bFlee = std::make_shared<CButton>(Point(Xoffset + 106, yPos), "icm002.def", CGI->generaltexth->zelp[380], std::bind(&CBattleInterface::bFleef,this), SDLK_r);
+	bAutofight = std::make_shared<CButton>(Point(Xoffset + 157, yPos), "icm004.def", CGI->generaltexth->zelp[382], std::bind(&CBattleInterface::bAutofightf,this), SDLK_a);
+	bSpell = std::make_shared<CButton>(Point(645, yPos), "icm005.def", CGI->generaltexth->zelp[385], std::bind(&CBattleInterface::bSpellf,this), SDLK_c);
+	bWait = std::make_shared<CButton>(Point(696, yPos), "icm006.def", CGI->generaltexth->zelp[386], std::bind(&CBattleInterface::bWaitf,this), SDLK_w);
+	bDefence = std::make_shared<CButton>(Point(747, yPos), "icm007.def", CGI->generaltexth->zelp[387], std::bind(&CBattleInterface::bDefencef,this), SDLK_d);
 	bDefence->assignedKeys.insert(SDLK_SPACE);
-	bConsoleUp = std::make_shared<CButton>(Point(624, 561), "ComSlide.def", std::make_pair("", ""), std::bind(&CBattleInterface::bConsoleUpf,this), SDLK_UP);
-	bConsoleDown = std::make_shared<CButton>(Point(624, 580), "ComSlide.def", std::make_pair("", ""), std::bind(&CBattleInterface::bConsoleDownf,this), SDLK_DOWN);
+	bConsoleUp = std::make_shared<CButton>(Point(624 - consoleOffset - consoleButtonOffset, yPos), "ComSlide.def", std::make_pair("", ""), std::bind(&CBattleInterface::bConsoleUpf,this), SDLK_UP);
+	bConsoleDown = std::make_shared<CButton>(Point(624 - consoleOffset - consoleButtonOffset, yPos + 19), "ComSlide.def", std::make_pair("", ""), std::bind(&CBattleInterface::bConsoleDownf,this), SDLK_DOWN);
 	bConsoleUp->setImageOrder(0, 1, 0, 0);
 	bConsoleDown->setImageOrder(2, 3, 2, 2);
 
 	console = std::make_shared<CBattleConsole>();
+
 	console->pos.x += 211;
-	console->pos.y += 560;
+	console->pos.x -= consoleOffset;
+	// With the custom image, the new console is 5px to the left
+	console->pos.x += 3;
+
+	// Retain original offset
+	console->pos.y += yPos;
+	console->pos.y -= 1;
+
+	// Left-hand specific offset
+	// console->pos.y -= 13;
+
 	console->pos.w = 406;
 	console->pos.h = 38;
 	if(tacticsMode)
@@ -783,7 +802,7 @@ void CBattleInterface::bOptionsf()
 
 	CCS->curh->changeGraphic(ECursor::ADVENTURE,0);
 
-	Rect tempRect = genRect(431, 481, 160, 84);
+	Rect tempRect = genRect(431, 481, 160 + (screen->w / 4), 84);
 	tempRect += pos.topLeft();
 	GH.pushIntT<CBattleOptionsWindow>(tempRect, this);
 }

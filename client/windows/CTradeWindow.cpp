@@ -703,7 +703,7 @@ CMarketplaceWindow::CMarketplaceWindow(const IMarket * Market, const CGHeroInsta
 		}
 	}
 
-	titleLabel = std::make_shared<CLabel>(300, 27, FONT_BIG, CENTER, Colors::YELLOW, title);
+	titleLabel = std::make_shared<CLabel>(22, 15, FONT_BIG, TOPLEFT, Colors::YELLOW, title);
 
 	initItems(false);
 	initItems(true);

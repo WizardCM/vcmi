@@ -119,7 +119,7 @@ class CGStatusBar : public CLabel, public std::enable_shared_from_this<CGStatusB
 	bool textLock; //Used for blocking changes to the text
 	void init();
 
-	CGStatusBar(std::shared_ptr<CPicture> background_, EFonts Font = FONT_SMALL, EAlignment Align = CENTER, const SDL_Color & Color = Colors::WHITE);
+	CGStatusBar(std::shared_ptr<CPicture> background_, EFonts Font = FONT_SMALL, EAlignment Align = TOPLEFT, const SDL_Color & Color = Colors::WHITE);
 	CGStatusBar(int x, int y, std::string name, int maxw = -1);
 protected:
 	Point getBorderSize() override;

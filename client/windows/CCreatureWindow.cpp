@@ -806,10 +806,18 @@ void CStackWindow::initSections()
 	pos.w = mainSection->pos.w;
 	pos.h += mainSection->pos.h;
 
+	bool halfScreen = pos.w < screen->w / 2;
+	int Xoffset = screen->w / 4;
+
+	if (halfScreen)
+		mainSection->moveBy(Point(Xoffset, 0));
+
 	if(info->stack) // in battle
 	{
 		activeSpellsSection = std::make_shared<ActiveSpellsSection>(this, pos.h);
 		pos.h += activeSpellsSection->pos.h;
+		if (halfScreen)
+			activeSpellsSection->moveBy(Point(Xoffset, 0));
 	}
 
 	if(info->commander)
@@ -841,22 +849,32 @@ void CStackWindow::initSections()
 		commanderTab = std::make_shared<CTabbedInt>(onCreate, Point(0, pos.h), 0);
 
 		pos.h += commanderMainSection->pos.h;
+		if (halfScreen)
+			commanderMainSection->moveBy(Point(Xoffset, 0));
 	}
 
 	if(!info->commander && !activeBonuses.empty())
 	{
 		bonusesSection = std::make_shared<BonusesSection>(this, pos.h);
 		pos.h += bonusesSection->pos.h;
+		if (halfScreen)
+			bonusesSection->moveBy(Point(Xoffset, 0));
 	}
 
 	if(!info->popupWindow)
 	{
 		buttonsSection = std::make_shared<ButtonsSection>(this, pos.h);
 		pos.h += buttonsSection->pos.h;
+		if (halfScreen)
+			buttonsSection->moveBy(Point(Xoffset, 0));
 		//FIXME: add status bar to image?
 	}
 	updateShadow();
 	pos = center(pos);
+	if (halfScreen) {
+		pos.x += Xoffset;
+		updateShadow();
+	}
 }
 
 std::string CStackWindow::generateStackExpDescription()

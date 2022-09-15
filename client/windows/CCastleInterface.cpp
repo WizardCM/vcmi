@@ -1350,7 +1350,7 @@ CHallInterface::CHallInterface(const CGTownInstance * Town):
 	auto statusbarBackground = std::make_shared<CPicture>(*background, barRect, 5, 556, false);
 	statusbar = CGStatusBar::create(statusbarBackground);
 
-	title = std::make_shared<CLabel>(399, 12, FONT_MEDIUM, CENTER, Colors::WHITE, town->town->buildings.at(BuildingID(town->hallLevel()+BuildingID::VILLAGE_HALL))->Name());
+	title = std::make_shared<CLabel>(200, 12, FONT_MEDIUM, CENTER, Colors::WHITE, town->town->buildings.at(BuildingID(town->hallLevel()+BuildingID::VILLAGE_HALL))->Name());
 	exit = std::make_shared<CButton>(Point(748, 556), "TPMAGE1.DEF", CButton::tooltip(CGI->generaltexth->hcommands[8]), [&](){close();}, SDLK_RETURN);
 	exit->assignedKeys.insert(SDLK_ESCAPE);
 
@@ -1377,7 +1377,10 @@ CHallInterface::CHallInterface(const CGTownInstance * Town):
 					}
 				}
 			}
-			int posX = pos.w/2 - (int)boxList[row].size()*154/2 - ((int)boxList[row].size()-1)*20 + 194*(int)col,
+			// Hardcode number of columns to left-align all buildings
+			// int size = (int)boxList[row].size();
+			int size = 4;
+			int posX = pos.w/2 - size*154/2 - (size - 1)*20 + 194*(int)col,
 				posY = 35 + 104*(int)row;
 
 			if(building)
@@ -1524,7 +1527,7 @@ CFortScreen::CFortScreen(const CGTownInstance * town):
 		fortSize--;
 
 	const CBuilding * fortBuilding = town->town->buildings.at(BuildingID(town->fortLevel()+6));
-	title = std::make_shared<CLabel>(400, 12, FONT_BIG, CENTER, Colors::WHITE, fortBuilding->Name());
+	title = std::make_shared<CLabel>(200, 12, FONT_BIG, CENTER, Colors::WHITE, fortBuilding->Name());
 
 	std::string text = boost::str(boost::format(CGI->generaltexth->fcommands[6]) % fortBuilding->Name());
 	exit = std::make_shared<CButton>(Point(748, 556), "TPMAGE1", CButton::tooltip(text), [&](){ close(); }, SDLK_RETURN);
@@ -1537,13 +1540,14 @@ CFortScreen::CFortScreen(const CGTownInstance * town):
 		Point(10, 288), Point(404,288)
 	};
 
+	positions.push_back(Point(10, 421));
 	if(fortSize == GameConstants::CREATURES_PER_TOWN)
 	{
-		positions.push_back(Point(206,421));
+		// positions.push_back(Point(206,421));
 	}
 	else
 	{
-		positions.push_back(Point(10, 421));
+		// positions.push_back(Point(10, 421));
 		positions.push_back(Point(404,421));
 	}
 
@@ -1580,7 +1584,7 @@ std::string CFortScreen::getBgName(const CGTownInstance * town)
 	if(fortSize > GameConstants::CREATURES_PER_TOWN && town->creatures.back().second.empty())
 		fortSize--;
 
-	if(fortSize == GameConstants::CREATURES_PER_TOWN)
+	if(fortSize == GameConstants::CREATURES_PER_TOWN && false)
 		return "TPCASTL7";
 	else
 		return "TPCASTL8";

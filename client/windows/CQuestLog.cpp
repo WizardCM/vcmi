@@ -133,6 +133,8 @@ CQuestLog::CQuestLog (const std::vector<QuestInfo> & Quests)
 	hideCompleteLabel = std::make_shared<CLabel>(46, 398, FONT_MEDIUM, TOPLEFT, Colors::WHITE, texts["hideComplete"]["label"].String());
 	slider = std::make_shared<CSlider>(Point(166, 195), 191, std::bind(&CQuestLog::sliderMoved, this, _1), QUEST_COUNT, 0, false, CSlider::BROWN);
 
+	this->moveBy(Point(screen->w / 8, 0));
+
 	recreateLabelList();
 	recreateQuestList(0);
 }

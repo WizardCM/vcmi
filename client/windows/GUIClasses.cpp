@@ -205,7 +205,7 @@ CRecruitmentWindow::CRecruitmentWindow(const CGDwelling * Dwelling, int Level, c
 
 	OBJECT_CONSTRUCTION_CAPTURING(255-DISPOSE);
 
-	statusbar = CGStatusBar::create(std::make_shared<CPicture>(*background, Rect(8, pos.h - 26, pos.w - 16, 19), 8, pos.h - 26));
+	statusbar = CGStatusBar::create(std::make_shared<CPicture>(*background, Rect(8, pos.h - 26, pos.w - 16, 19), 8, pos.h - 26), FONT_SMALL, CENTER);
 
 	slider = std::make_shared<CSlider>(Point(176,279),135,std::bind(&CRecruitmentWindow::sliderMoved,this, _1),0,0,0,true);
 
@@ -1622,9 +1622,17 @@ CTransformerWindow::CTransformerWindow(const CGHeroInstance * _hero, const CGTow
 			items.push_back(std::make_shared<CItem>(this, army->getStackCount(SlotID(i)), i));
 	}
 
-	all = std::make_shared<CButton>(Point(146, 416), "ALTARMY.DEF", CGI->generaltexth->zelp[590], [&](){ addAll(); }, SDLK_a);
-	convert = std::make_shared<CButton>(Point(269, 416), "ALTSACR.DEF", CGI->generaltexth->zelp[591], [&](){ makeDeal(); }, SDLK_RETURN);
-	cancel = std::make_shared<CButton>(Point(392, 416), "ICANCEL.DEF", CGI->generaltexth->zelp[592], [&](){ close(); },SDLK_ESCAPE);
+	// int allX = 146;
+	// int convertX = 269;
+	// int concelX = 392;
+	// TODO Need an updated "SKTRNBK" image file without buttons
+	int allX = 335;
+	int convertX = 415;
+	int cancelX = 495;
+
+	all = std::make_shared<CButton>(Point(allX, 416), "ALTARMY.DEF", CGI->generaltexth->zelp[590], [&](){ addAll(); }, SDLK_a);
+	convert = std::make_shared<CButton>(Point(convertX, 416), "ALTSACR.DEF", CGI->generaltexth->zelp[591], [&](){ makeDeal(); }, SDLK_RETURN);
+	cancel = std::make_shared<CButton>(Point(cancelX, 416), "ICANCEL.DEF", CGI->generaltexth->zelp[592], [&](){ close(); },SDLK_ESCAPE);
 	statusbar = CGStatusBar::create(std::make_shared<CPicture>(*background, Rect(8, pos.h - 26, pos.w - 16, 19), 8, pos.h - 26));
 
 	titleLeft = std::make_shared<CLabel>(153, 29,FONT_SMALL, CENTER, Colors::YELLOW, CGI->generaltexth->allTexts[485]);//holding area

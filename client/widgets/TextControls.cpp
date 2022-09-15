@@ -362,7 +362,7 @@ CGStatusBar::CGStatusBar(std::shared_ptr<CPicture> background_, EFonts Font, EAl
 }
 
 CGStatusBar::CGStatusBar(int x, int y, std::string name, int maxw)
-	: CLabel(x, y, FONT_SMALL, CENTER)
+	: CLabel(x, y, FONT_SMALL, TOPLEFT)
 {
 	OBJECT_CONSTRUCTION_CAPTURING(255 - DISPOSE);
 	background = std::make_shared<CPicture>(name);

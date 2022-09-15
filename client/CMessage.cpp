@@ -25,7 +25,7 @@
 const int BETWEEN_COMPS_ROWS = 10;
 const int BEFORE_COMPONENTS = 30;
 const int BETWEEN_COMPS = 30;
-const int SIDE_MARGIN = 30;
+const int SIDE_MARGIN = 20;
 
 template <typename T, typename U> std::pair<T,U> max(const std::pair<T,U> &x, const std::pair<T,U> &y)
 {
@@ -206,7 +206,7 @@ void CMessage::drawIWindow(CInfoWindow * ret, std::string text, PlayerColor play
 	if(dynamic_cast<CSelWindow*>(ret)) //it's selection window, so we'll blit "or" between components
 		blitOr = true;
 
-	const int sizes[][2] = {{400, 125}, {500, 150}, {600, 200}, {480, 400}};
+	const int sizes[][2] = {{300, 225}, {300, 250}, {300, 300}, {300, 500}};
 
 	for(int i = 0;
 		i < ARRAY_COUNT(sizes)
@@ -255,9 +255,10 @@ void CMessage::drawIWindow(CInfoWindow * ret, std::string text, PlayerColor play
 
 	vstd::amin(winSize.first, screen->w - 150);
 
+	int customXOffset = ret->buttons.size() ? (screen->w / 2) : 0;
 	ret->bitmap = drawDialogBox (winSize.first + 2*SIDE_MARGIN, winSize.second + 2*SIDE_MARGIN, player);
 	ret->pos.h=ret->bitmap->h;
-	ret->pos.w=ret->bitmap->w;
+	ret->pos.w=ret->bitmap->w - customXOffset;
 	ret->center();
 
 	int curh = SIDE_MARGIN;
@@ -269,7 +270,7 @@ void CMessage::drawIWindow(CInfoWindow * ret, std::string text, PlayerColor play
 			curh = (ret->bitmap->h - ret->text->pos.h)/2;
 	}
 
-	ret->text->moveBy(Point(xOffset, curh));
+	ret->text->moveBy(Point(xOffset + (customXOffset / 2), curh));
 
 	curh += ret->text->pos.h;
 

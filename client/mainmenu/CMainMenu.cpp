@@ -374,8 +374,11 @@ CMultiMode::CMultiMode(ESelectionScreen ScreenType)
 	background->convertToScreenBPP(); //so we could draw without problems
 	blitAt(CPicture("MUMAP.bmp"), 16, 77, *background);
 	pos = background->center(); //center, window has size of bg graphic
+	int Xoffset = screen->w / 4;
+	pos.x += Xoffset;
+	background->moveBy(Point(Xoffset, 0));
 
-	statusBar = CGStatusBar::create(std::make_shared<CPicture>(Rect(7, 465, 440, 18), 0)); //226, 472
+	statusBar = CGStatusBar::create(std::make_shared<CPicture>(Rect(7, 465, 440, 18), 0), FONT_SMALL, CENTER); //226, 472
 	playerName = std::make_shared<CTextInput>(Rect(19, 436, 334, 16), *background);
 	playerName->setText(settings["general"]["playerName"].String());
 	playerName->cb += std::bind(&CMultiMode::onNameChange, this, _1);
@@ -412,6 +415,9 @@ CMultiPlayers::CMultiPlayers(const std::string & firstPlayer, ESelectionScreen S
 	OBJ_CONSTRUCTION_CAPTURING_ALL_NO_DISPOSE;
 	background = std::make_shared<CPicture>("MUHOTSEA.bmp");
 	pos = background->center(); //center, window has size of bg graphic
+	int Xoffset = screen->w / 4;
+	pos.x += Xoffset;
+	background->moveBy(Point(Xoffset, 0));
 
 	std::string text = CGI->generaltexth->allTexts[446];
 	boost::replace_all(text, "\t", "\n");
@@ -425,7 +431,7 @@ CMultiPlayers::CMultiPlayers(const std::string & firstPlayer, ESelectionScreen S
 
 	buttonOk = std::make_shared<CButton>(Point(95, 338), "MUBCHCK.DEF", CGI->generaltexth->zelp[560], std::bind(&CMultiPlayers::enterSelectionScreen, this), SDLK_RETURN);
 	buttonCancel = std::make_shared<CButton>(Point(205, 338), "MUBCANC.DEF", CGI->generaltexth->zelp[561], [=](){ close();}, SDLK_ESCAPE);
-	statusBar = CGStatusBar::create(std::make_shared<CPicture>(Rect(7, 381, 348, 18), 0)); //226, 472
+	statusBar = CGStatusBar::create(std::make_shared<CPicture>(Rect(7, 381, 348, 18), 0), FONT_SMALL, CENTER); //226, 472
 
 	inputNames[0]->setText(firstPlayer, true);
 	inputNames[0]->giveFocus();
@@ -460,6 +466,9 @@ CSimpleJoinScreen::CSimpleJoinScreen(bool host)
 	OBJ_CONSTRUCTION_CAPTURING_ALL_NO_DISPOSE;
 	background = std::make_shared<CPicture>("MUDIALOG.bmp"); // address background
 	pos = background->center(); //center, window has size of bg graphic (x,y = 396,278 w=232 h=212)
+	int Xoffset = screen->w / 4;
+	pos.x += Xoffset;
+	background->moveBy(Point(Xoffset, 0));
 
 	textTitle = std::make_shared<CTextBox>("", Rect(20, 20, 205, 50), 0, FONT_BIG, CENTER, Colors::WHITE);
 	inputAddress = std::make_shared<CTextInput>(Rect(25, 68, 175, 16), *background.get());
@@ -483,7 +492,7 @@ CSimpleJoinScreen::CSimpleJoinScreen(bool host)
 	inputPort->setText(CServerHandler::getDefaultPortStr(), true);
 
 	buttonCancel = std::make_shared<CButton>(Point(142, 142), "MUBCANC.DEF", CGI->generaltexth->zelp[561], std::bind(&CSimpleJoinScreen::leaveScreen, this), SDLK_ESCAPE);
-	statusBar = CGStatusBar::create(std::make_shared<CPicture>(Rect(7, 186, 218, 18), 0));
+	statusBar = CGStatusBar::create(std::make_shared<CPicture>(Rect(7, 186, 218, 18), 0), FONT_SMALL, CENTER);
 }
 
 void CSimpleJoinScreen::connectToServer()

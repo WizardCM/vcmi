@@ -45,6 +45,7 @@ CWindowObject::CWindowObject(int options_, std::string imageName, Point centerAt
 	if (options & RCLICK_POPUP)
 		CCS->curh->hide();
 
+	centerAt.x += screen->w / 4;
 	if (background)
 		pos = background->center(centerAt);
 	else
@@ -66,10 +67,17 @@ CWindowObject::CWindowObject(int options_, std::string imageName):
 	if(options & RCLICK_POPUP)
 		CCS->curh->hide();
 
-	if(background)
+	double maxWidth = screen->w == 800 ? 0.75 : 0.55;
+	bool halfWidth = background && background->bg->w < screen->w * maxWidth;
+	int Xoffset = screen->w / 4;
+	if (background && halfWidth) {
 		pos = background->center();
-	else
-		center(Point(screen->w/2, screen->h/2));
+		pos.x += Xoffset;
+		background->moveBy(Point(Xoffset, 0));
+	} else if (background) {
+		pos = background->center();
+	} else
+		center(Point(screen->w/2 + Xoffset, screen->h/2));
 
 	if(!(options & SHADOW_DISABLED))
 		setShadow(true);
@@ -97,7 +105,7 @@ void CWindowObject::setBackground(std::string filename)
 	background = createBg(filename, options & PLAYER_COLORED);
 
 	if(background)
-		pos = background->center(Point(pos.w/2 + pos.x, pos.h/2 + pos.y));
+		pos = background->center(Point(pos.w/2 + pos.x + (screen->w / 4), pos.h/2 + pos.y));
 
 	updateShadow();
 }

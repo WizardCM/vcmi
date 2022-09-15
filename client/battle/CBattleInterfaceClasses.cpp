@@ -42,7 +42,7 @@
 
 void CBattleConsole::showAll(SDL_Surface * to)
 {
-	Point textPos(pos.x + pos.w/2, pos.y + 17);
+	Point textPos(pos.x + 10, pos.y + 17);
 
 	if(ingcAlter.size())
 	{
@@ -399,7 +399,9 @@ CBattleResultWindow::CBattleResultWindow(const BattleResult & br, CPlayerInterfa
 {
 	OBJECT_CONSTRUCTION_CAPTURING(255-DISPOSE);
 
-	pos = genRect(561, 470, (screen->w - 800)/2 + 165, (screen->h - 600)/2 + 19);
+	int xPos = (screen->w - 800) / 2 + 165;
+	xPos += screen->w / 4;
+	pos = genRect(561, 470, xPos, (screen->h - 600)/2 + 19);
 	background = std::make_shared<CPicture>("CPRESULT");
 	background->colorize(owner.playerID);
 
